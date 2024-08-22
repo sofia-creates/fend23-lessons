@@ -1,4 +1,3 @@
-import { generateProducts } from "@/data/productGenerator";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
@@ -18,9 +17,7 @@ export async function POST(req) {
    
     const name = url.searchParams.get("name");
     const age = url.searchParams.get("age");
-    const address = url.searchParams.get("address");
-
-    console.log(generateProducts(10));    
+    const address = url.searchParams.get("address");   
    
     return NextResponse.json({
         message: `Hej mitt namn är ${name} jag är ${age} år gamal. Jag bor i ${address}.`
