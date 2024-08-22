@@ -1,37 +1,8 @@
 import { NextResponse } from "next/server";
 
-//Simulated database
+import { lowerCaseCompare, validateProductData } from "@/utils/helpers/apiHelpers";
 
-const products = [{
-    name: "Tomato",
-    description: "Red, round, soft and hard",
-    price: 10,
-    category: "vegetables",
-    id: 1
-},{
-    name: "Cuecumber",
-    description: "Green, oval? ovalish?",
-    price: 8,
-    category: "vegetables",
-    id: 2
-},{
-    name: "Tomato paste",
-    description: "Liquid previous round red thing",
-    price: 4,
-    category: "vegetables",
-    id: 3
-},
-{
-    name: "Milk",
-    description: "Liquid sorta like Oat-milk",
-    price: 7,
-    category: "dairy",
-    id: 4
-}]
-
-function lowerCaseCompare(a = "",b = "") {
-    return a.toLowerCase().includes(b.toLowerCase())
-}
+import products from "@/data/webShopProducts";
 
 export async function GET(req) {
     const url = new URL(req.url);
@@ -39,7 +10,7 @@ export async function GET(req) {
     const search = url.searchParams.get("search");
     const category = url.searchParams.get("category");
     const maxPrice = url.searchParams.get("max-price")
-    
+
     let _products = [...products] // Simulates a database call
 
     if(category) {
@@ -66,4 +37,29 @@ export async function GET(req) {
 
 
     return NextResponse.json({results: _products})
+}
+
+export async function POST(req) {
+    const body = await req.json();
+    // Validate fields
+    const [hasErrors, errors] = validateProductData(body)
+    if(hasErrors) {
+        return NextResponse.json({
+            errors
+        }, {
+            status: 400
+        })
+    }
+    const id = products.length + 1
+    const product = {
+        ...body,
+        id
+    }
+    products.push(product) // Simulates a database save
+
+    return NextResponse.json({
+        product: product
+    }, {
+        status: 201
+    })
 }
