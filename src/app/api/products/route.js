@@ -38,6 +38,8 @@ export async function GET(req) {
 
     const search = url.searchParams.get("search");
     const category = url.searchParams.get("category");
+    const maxPrice = url.searchParams.get("max-price")
+    
     let _products = [...products] // Simulates a database call
 
     if(category) {
@@ -49,7 +51,18 @@ export async function GET(req) {
             lowerCaseCompare(product.description, search)
         )
     }
-    //TODO: Add max price comparission
+    if(maxPrice) {
+        const maxPriceNum = Number(maxPrice);
+        if(!maxPriceNum){
+            return NextResponse.json({
+                message: "Error: max-price must be a number"
+            }, {
+                status: 400
+            })
+        }
+        _products = _products.filter(product => product.price <= maxPriceNum)
+    }
+
 
 
     return NextResponse.json({results: _products})
