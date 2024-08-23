@@ -4,17 +4,6 @@ import { lowerCaseCompare, validateBookData } from "@/utils/helpers/apiHelpers";
 
 import books from "@/data/books";
 
-// Type def for book
-/*
-{
-  id: number,
-  title: string,
-  author: string,
-  year: number,
-  genre: string,
-  keywords: string[],
-}*/
-
 export async function GET(req) {
   const url = new URL(req.url);
   const search = url.searchParams.get("search");
@@ -62,7 +51,7 @@ export async function POST(req) {
         id: filteredBooks.length+1,
         ...body
     }
-    
+
     books.push(book)
     
     return NextResponse.json(book, {

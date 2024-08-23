@@ -4,6 +4,16 @@ export function lowerCaseCompare(a = "",b = "") {
     return a.toLowerCase().includes(b.toLowerCase())
 }
 
+export function getIdFromUrl(url= ""){
+    const { pathname } = new URL(url)
+    const startIndexOfId = pathname.lastIndexOf("/")+1
+    if(startIndexOfId === 0) {
+        return ""
+    }
+    return pathname.substring(startIndexOfId)
+
+}
+
 export function validateProductData(data) {
     let errors = {}
     if(!data.name){
@@ -22,8 +32,11 @@ export function validateProductData(data) {
     return [hasErrors, errors]
 } 
 
-export function validateBookData(data) {
+export function validateBookData(data, book) {
     let errors = {}
+    if(book && data.id && data.id !== book.id){
+        errors.id = "Mismatch of ids"
+    }
     if(!data.title || typeof data.title !== "string") {
         errors.title = "Title is required"
     }
@@ -41,4 +54,12 @@ export function validateBookData(data) {
     }
     const hasErrors = Object.keys(errors).length > 0;
     return [hasErrors, errors]
-} 
+}
+
+export function object404Respsonse(response, model = "") {
+    return response.json({
+        message: `${model} not found`
+    }, {
+        status: 404
+    })
+}
