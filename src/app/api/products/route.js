@@ -58,7 +58,7 @@ export async function POST(req) {
     products.push(product) // Simulates a database save
 
     return NextResponse.json({
-        product: product
+        product,
     }, {
         status: 201
     })
