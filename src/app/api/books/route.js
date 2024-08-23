@@ -8,8 +8,9 @@ import { lowerCaseCompare } from "@/utils/helpers/apiHelpers";
   id: number,
   title: string,
   author: string,
-    year: number,
-    genre: string,
+  year: number,
+  genre: string,
+  keywords: string[],
 }*/
 
 export async function GET(req) {
