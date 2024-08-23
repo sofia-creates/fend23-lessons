@@ -53,6 +53,17 @@ export async function PUT(req) {
     return NextResponse.json(updatedBook)
 }
 
-export async function DELETE(req) {
-    //TODO: delete book if found
+export async function DELETE(req, options) {
+    const id = options.params.id
+    
+    const bookIndex = books.findIndex(b => b.id == id)
+    if(bookIndex === -1) {
+        return object404Respsonse(NextResponse, "Book")
+    }
+    
+    books.splice(bookIndex,1)
+
+    return new Response(null, {
+        status: 204
+    })
 }
