@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import books from "@/data/books";
-import { getIdFromUrl, object404Respsonse, validateBookData } from "@/utils/helpers/apiHelpers";
+import { object404Respsonse, validateBookData } from "@/utils/helpers/apiHelpers";
 
-export async function GET(req){
-    const id = getIdFromUrl(req.url)
+export async function GET(req, options){
+    const id = options.params.id
 
     if(!id) {
         return object404Respsonse(NextResponse, "Book")
     }
-    const book = books.find(b => b.id == id)
+    const book = books.find(b => b.id == id) // Database call simulation
     if(!book) {
         return object404Respsonse(NextResponse, "Book")
     }
@@ -17,7 +17,7 @@ export async function GET(req){
 }
 
 export async function PUT(req) {
-    const id = getIdFromUrl(req.url);
+    const id = options.params.id;
     if(!id) return object404Respsonse(NextResponse, "Book");
     
     const book = books.find(b => b.id == id);
@@ -61,7 +61,7 @@ export async function DELETE(req, options) {
         return object404Respsonse(NextResponse, "Book")
     }
     
-    books.splice(bookIndex,1)
+    books.splice(bookIndex,1) // Database call simulation
 
     return new Response(null, {
         status: 204
