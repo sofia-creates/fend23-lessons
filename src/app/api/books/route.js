@@ -40,7 +40,7 @@ export async function POST(req) {
       }
     );
   }
-
+ 
   let newBook;
   try {
     newBook = await prisma.book.create({
