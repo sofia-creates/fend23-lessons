@@ -2,18 +2,24 @@ import { NextResponse } from "next/server";
 import books from "@/data/books";
 import { object404Respsonse, validateBookData } from "@/utils/helpers/apiHelpers";
 
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
 export async function GET(req, options){
     const id = options.params.id
 
-    if(!id) {
+    try {
+        const book = await prisma.book.findUniqueOrThrow({
+            where: {
+                id: Number(id)
+            }
+        })
+        return NextResponse.json(book)
+    }catch(error) {
+        console.log(error)
         return object404Respsonse(NextResponse, "Book")
     }
-    const book = books.find(b => b.id == id) // Database call simulation
-    if(!book) {
-        return object404Respsonse(NextResponse, "Book")
-    }
-    
-    return NextResponse.json(book)
 }
 
 export async function PUT(req) {
