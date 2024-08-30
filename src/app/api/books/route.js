@@ -40,18 +40,26 @@ export async function POST(req) {
       }
     );
   }
-  // const [hasErrors, errors] = validateBookData(body)
-  // if(hasErrors) {
-  //     return NextResponse.json({
-  //         errors
-  //     }, {
-  //         status: 400
-  //     })
-  // }
 
-  const newBook = await prisma.book.create({
-    data: body,
-  });
+  let newBook;
+  try {
+    newBook = await prisma.book.create({
+      data: {
+        title: body.title,
+        author: 12,
+      },
+    });
+  }catch (error) {
+    console.log(error.message);
+    return NextResponse.json(
+      {
+        message: "Invalid data sent for book creation",
+      },
+      {
+        status: 400,
+      }
+    );
+  }
 
   return NextResponse.json(newBook, {
     status: 201,
