@@ -23,7 +23,7 @@ model Author {
   id        Int   @id @default(autoincrement())
   title     String
   yearOfBirth    Int
-}
+} 
 
 
 
