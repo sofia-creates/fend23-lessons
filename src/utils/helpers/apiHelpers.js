@@ -32,26 +32,28 @@ export function validateProductData(data) {
     return [hasErrors, errors]
 } 
 
-export function validateBookData(data, book) {
+export function validateBookData(data) {
     let errors = {}
-    if(book && data.id && data.id !== book.id){
-        errors.id = "Mismatch of ids"
-    }
     if(!data.title || typeof data.title !== "string") {
         errors.title = "Title is required"
     }
     if(!data.author || typeof data.author !== "string") {
         errors.author = "Author is required"
     }
-    if(!data.year || !Number(data.year) || data.year > new Date().getFullYear()){
-        errors.year = "Enter a valid year"
+    
+    const hasErrors = Object.keys(errors).length > 0;
+    return [hasErrors, errors]
+}
+
+export function validateAuthorData(data) {
+    let errors = {}
+    if(!data.name || typeof data.name !== "string") {
+        errors.name = "Name is required"
     }
-    if(!data.genre) {
-        errors.genre = "Genre is required"
+    if(!data.yearOfBirth || typeof data.yearOfBirth !== "number") {
+        errors.yearOfBirth = "yearOfBirth is required"
     }
-    if(!data.keywords || !Array.isArray(data.keywords) || data.keywords.length === 0){
-        errors.genre = "At least one keyword is required sent as a array"
-    }
+    
     const hasErrors = Object.keys(errors).length > 0;
     return [hasErrors, errors]
 }
@@ -62,4 +64,14 @@ export function object404Respsonse(response, model = "") {
     }, {
         status: 404
     })
+}
+
+export async function validateJSONData(req) {
+    let body
+    try {
+        body = await req.json() // Parse incoming data to json
+        return [false, body]
+    }catch (error) {
+        return [true,null]
+    }
 }
