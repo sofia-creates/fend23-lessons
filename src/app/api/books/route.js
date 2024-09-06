@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { validateBookData } from "@/utils/helpers/apiHelpers";
 
 import { PrismaClient } from "@prisma/client";
+import { verifyJWT } from "@/utils/helpers/authHelpers";
 
 const prisma = new PrismaClient();
 
@@ -40,6 +41,8 @@ export async function POST(req) {
       }
     );
   }
+  const userId = req.headers.get('userId')
+  console.log("User making the req: ", userId)
 
   const [hasErrors, errors] = validateBookData(body)
     if(hasErrors) {
@@ -55,7 +58,8 @@ export async function POST(req) {
     newBook = await prisma.book.create({
       data: {
         title: body.title,
-        author: body.author
+        author: body.author,
+        genre: body.genre
       },
     });
   }catch (error) {

@@ -26,7 +26,7 @@ export async function POST(req, options) {
   if (bodyHasErrors) {
     return NextResponse.json(
       {
-        message: "A valid JSON object has to be sent",
+        message: "A valid JSON object has to be sent" + errors,
       },
       { status: 400 }
     );
@@ -55,7 +55,7 @@ export async function POST(req, options) {
     console.log(error.message);
     return NextResponse.json(
       {
-        message: "Invalid data sent for author creation",
+        message: `Invalid data sent for author creation, error is: ${error}`,
       },
       {
         status: 400,
